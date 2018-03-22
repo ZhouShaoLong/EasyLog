@@ -1,6 +1,6 @@
 package com.tosit.log
 
-import com.tosit.entity
+import com.tosit.utils.DataUtils
 import com.tosit.entity.EasyLog
 import kafka.serializer.StringDecoder
 import org.apache.log4j.{Level, Logger}
@@ -15,7 +15,7 @@ import org.apache.spark.{SparkConf, SparkContext}
 object Main {
   def main(args: Array[String]): Unit = {
 
-    Logger.getLogger("org.apache.spark").setLevel(Level.WARN)
+    Logger.getLogger("org.apache.spark").setLevel(Level.ERROR)
 
     val conf = new SparkConf().setAppName("stocker").setMaster("local[4]")
     val spark = new SparkContext(conf)
@@ -40,16 +40,24 @@ object Main {
       "auto.offset.reset" -> "smallest"
     )
 
-    val stream = getStream(ssc, kafkaParams, topicMap)
+//    val stream = getStream(ssc, kafkaParams, topicMap)
 
 
-    val count = stream.map(_._2).flatMap(_.split(" ")).map((_, 1)).reduceByKey(_ + _)
+//    val count = stream.map(_._2).flatMap(_.split(" ")).map((_, 1)).reduceByKey(_ + _)
 
-    count.print()
+//    count.print()
 
-    ssc.start()
-    ssc.awaitTermination()
-    ssc.stop()
+//    ssc.start()
+//    ssc.awaitTermination()
+//    ssc.stop()
+
+
+    val str = """{"username":"Ricky", "attribute":{"age":21, "weight": 60}}"""
+    val map = DataUtils.StringToMap(str)
+    val easyLog = DataUtils.MapToEasyLog(map)
+    println(easyLog.getDay())
+
+
   }
 
   def getStream(ssc:StreamingContext, kafkaParams:Map[String, String], topicMap:Map[String,Int]): ReceiverInputDStream[(String, String)] ={
