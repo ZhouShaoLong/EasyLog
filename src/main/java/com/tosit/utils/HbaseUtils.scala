@@ -74,19 +74,38 @@ object HbaseUtils{
     }
   }
 
-  //获取一行数据
-  def getRow(connection:Connection,tableName: String, row: String): Unit = {
+  //根据key获取一行数据
+  def getRow(connection:Connection,tableName: String, key: String):Result= {
     val userTable = TableName.valueOf(tableName)
     val table:Table = connection.getTable(userTable)
-    val get: Get = new Get(Bytes.toBytes(row))
+    val get: Get = new Get(Bytes.toBytes(key))
     val result: Result = table.get(get)
-    for (rowKv <- result.raw()) {
+    return result
+/*    for (rowKv <- result.raw()) {
       println(new String(rowKv.getFamily))
       println(new String(rowKv.getQualifier))
       println(rowKv.getTimestamp)
       println(new String(rowKv.getRow))
       println(new String(rowKv.getValue))
-    }
+      println("---------------------")
+    }*/
+  }
+
+
+  //根据key展示一行数据，仅用于测试使用
+  def showRow(connection:Connection,tableName: String, key: String):Unit= {
+    val userTable = TableName.valueOf(tableName)
+    val table:Table = connection.getTable(userTable)
+    val get: Get = new Get(Bytes.toBytes(key))
+    val result: Result = table.get(get)
+        for (rowKv <- result.raw()) {
+          println(new String(rowKv.getFamily))
+          println(new String(rowKv.getQualifier))
+          println(rowKv.getTimestamp)
+          println(new String(rowKv.getRow))
+          println(new String(rowKv.getValue))
+          println("---------------------")
+        }
   }
 
   //获取所有数据

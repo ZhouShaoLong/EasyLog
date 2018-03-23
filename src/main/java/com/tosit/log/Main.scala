@@ -1,7 +1,6 @@
 package com.tosit.log
 
 import com.tosit.utils.DataUtils
-import com.tosit.entity.EasyLog
 import kafka.serializer.StringDecoder
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.storage.StorageLevel

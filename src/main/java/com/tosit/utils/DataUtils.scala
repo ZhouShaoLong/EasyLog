@@ -1,6 +1,5 @@
 package com.tosit.utils
 
-import com.tosit.entity.EasyLog
 import scala.util.parsing.json.JSON
 
 class DataUtils {}
