@@ -10,13 +10,9 @@ class EasyLog(_userId: Int, _day: String, _begintime: Long, _endtime: Long, _dat
   private val palytime: Long = endtime - begintime
 
   def getUserId() = userId
-
   def getDay() = day
-
   def getBegintime() = begintime
-
   def getEndtime() = endtime
-
   def getData() = data
 }
 

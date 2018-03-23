@@ -3,6 +3,7 @@ package com.tosit.utils
 import org.apache.hadoop.hbase.client._
 import org.apache.hadoop.hbase.util.Bytes
 import org.apache.hadoop.hbase.{HColumnDescriptor, HTableDescriptor, TableName}
+import java.util.Iterator
 
 class HbaseUtils {
 }
@@ -70,6 +71,40 @@ object HbaseUtils{
       println("key:"+value)
     }finally{
       if(table!=null)table.close()
+    }
+  }
+
+  //获取一行数据
+  def getRow(connection:Connection,tableName: String, row: String): Unit = {
+    val userTable = TableName.valueOf(tableName)
+    val table:Table = connection.getTable(userTable)
+    val get: Get = new Get(Bytes.toBytes(row))
+    val result: Result = table.get(get)
+    for (rowKv <- result.raw()) {
+      println(new String(rowKv.getFamily))
+      println(new String(rowKv.getQualifier))
+      println(rowKv.getTimestamp)
+      println(new String(rowKv.getRow))
+      println(new String(rowKv.getValue))
+    }
+  }
+
+  //获取所有数据
+  def getAllRows(connection: Connection,tableName: String): Unit = {
+    val userTable = TableName.valueOf(tableName)
+    val table:Table = connection.getTable(userTable)
+    val results: ResultScanner = table.getScanner(new Scan())
+    val it: Iterator[Result] = results.iterator()
+    while (it.hasNext) {
+      val next: Result = it.next()
+      for(kv <- next.raw()){
+        println(new String(kv.getRow))
+        println(new String(kv.getFamily))
+        println(new String(kv.getQualifier))
+        println(new String(kv.getValue))
+        println(kv.getTimestamp)
+        println("---------------------")
+      }
     }
   }
 
