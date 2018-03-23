@@ -9,13 +9,9 @@ class EasyLog(_userId: Int, _day: String, _begintime: Long, _endtime: Long, _dat
   var data: Map[String, Long] = _data
 
   def getUserId() = userId
-
   def getDay() = day
-
   def getBegintime() = begintime
-
   def getEndtime() = endtime
-
   def getData() = data
 }
 

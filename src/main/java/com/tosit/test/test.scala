@@ -20,17 +20,18 @@ object test {
       //创建表测试
       val f: Array[String] = Array("article")
       try {
-        HbaseUtils.createHTable(connection, "blog", f)
+        //HbaseUtils.createHTable(connection, "blog", f)
         //插入数据,重复执行为覆盖
-        HbaseUtils.insertHTable(connection, "blog", "article", "engish", "002", "c++ for me")
-        HbaseUtils.insertHTable(connection, "blog", "article", "engish", "003", "python for me")
-        HbaseUtils.insertHTable(connection, "blog", "article", "chinese", "002", "C++ for china")
+        //HbaseUtils.insertHTable(connection, "blog", "article", "engish", "002", "c++ for me")
+        //HbaseUtils.insertHTable(connection, "blog", "article", "engish", "003", "python for me")
+        //HbaseUtils.insertHTable(connection, "blog", "article", "chinese", "002", "C++ for china")
         //删除记录
         // deleteRecord(connection,"blog","artitle","chinese","002")
         //扫描整个表
-        HbaseUtils.scanRecord(connection, "blog", "article", "engish")
+        //HbaseUtils.scanRecord(connection, "blog", "article", "engish")
         //删除表测试
         //deleteHTable(connection, "blog")
+        HbaseUtils.getRow(connection,"blog","002")
       } finally {
         connection.close
         //sc.stop
