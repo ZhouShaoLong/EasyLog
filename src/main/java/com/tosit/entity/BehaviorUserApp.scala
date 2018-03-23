@@ -1,5 +1,9 @@
 package com.tosit.entity
 
+/**
+  * 对应同名数据库
+  * */
+
 class BehaviorUserApp(_userId:Int,_day:String, _begintime: Long, _endtime: Long, _data: Map[String, Long]) {
   var userId:Int = _userId
   var day:String = _day
