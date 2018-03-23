@@ -1,12 +1,13 @@
 package com.tosit.entity
 
 
-class EasyLog(_userId: Int, _day: String, _begintime: Long, _endtime: Long, _data: Map[String, Long]) {
-  var userId: Int = _userId
-  var day: String = _day
-  var begintime: Long = _begintime
-  var endtime: Long = _endtime
-  var data: Map[String, Long] = _data
+class EasyLog(_userId: Int, _day: String, _begintime: Long, _endtime: Long, _data: List[Map[String, Any]]) extends java.io.Serializable {
+  private val userId: Int = _userId
+  private val day: String = _day
+  private val begintime: Long = _begintime
+  private val endtime: Long = _endtime
+  private val data: List[Map[String, Any]] = _data
+  private val palytime: Long = endtime - begintime
 
   def getUserId() = userId
 
