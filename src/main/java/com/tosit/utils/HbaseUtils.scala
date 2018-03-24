@@ -1,10 +1,11 @@
 package com.tosit.utils
-
 import java.util.Iterator
 
 import org.apache.hadoop.hbase.client._
 import org.apache.hadoop.hbase.util.Bytes
 import org.apache.hadoop.hbase.{HColumnDescriptor, HTableDescriptor, TableName}
+
+import scala.util.control.Exception
 
 class HbaseUtils {
 }
@@ -57,6 +58,10 @@ object HbaseUtils{
       // p.addColumn(family.getBytes(),"china".getBytes(),"JAVA for china".getBytes())
       //提交一行
       table.put(p)
+    }catch {
+      case ex:Exception =>{
+        println(ex)
+      }
     }
   }
 
@@ -70,8 +75,11 @@ object HbaseUtils{
       val result=table.get(g)
       val value=Bytes.toString(result.getValue(family.getBytes(),column.getBytes()))
       println("key:"+value)
-    }finally{
       if(table!=null)table.close()
+    }catch{
+      case ex:Exception=>{
+        println(ex)
+      }
     }
   }
 
@@ -92,6 +100,20 @@ object HbaseUtils{
     }*/
   }
 
+  //根据key和column获取一个数据
+  def getValueByColumn(connection: Connection,tableName: String,key:String,column:String):String={
+    val userTable = TableName.valueOf(tableName)
+    val table:Table = connection.getTable(userTable)
+    val get: Get = new Get(Bytes.toBytes(key))
+    get.addColumn(Bytes.toBytes("timelen"),Bytes.toBytes(column))
+    val result: Result = table.get(get)
+    var res:String = ""
+    for (rowKv <- result.raw()) {
+      res = new String(rowKv.getValue)
+    }
+    return res
+  }
+
   //根据key展示一行数据，仅用于测试使用
   def showRow(connection:Connection,tableName: String, key: String):Unit= {
     val userTable = TableName.valueOf(tableName)
@@ -108,12 +130,27 @@ object HbaseUtils{
         }
   }
 
+  //根据key查询是否存在
   def ifExists(connection: Connection,tableName:String,key:String):Boolean = {
     val userTable = TableName.valueOf(tableName)
     val table:Table = connection.getTable(userTable)
     val get: Get = new Get(Bytes.toBytes(key))
     val result: Result = table.get(get)
     if (result.isEmpty){
+      return false
+    }else{
+      return true
+    }
+  }
+
+  //根据key和colomn查询是否存在具体一列
+  def ifExistsByColumn(connection: Connection,tableName: String,key:String,column:String):Boolean = {
+    val userTable = TableName.valueOf(tableName)
+    val table:Table = connection.getTable(userTable)
+    val get: Get = new Get(Bytes.toBytes(key))
+    get.addColumn(Bytes.toBytes("timelen"),Bytes.toBytes(column))
+    val result: Result = table.get(get)
+    if(result.isEmpty){
       return false
     }else{
       return true
@@ -136,6 +173,26 @@ object HbaseUtils{
         println(kv.getTimestamp)
         println("---------------------")
       }
+    }
+  }
+
+  //更新一个列
+  def updateColumn(connection: Connection,tableName:String,key:String,column:String,value:String):Boolean = {
+    try{
+      val userTable = TableName.valueOf(tableName)
+      val table=connection.getTable(userTable)
+      //准备key 的数据
+      val p=new Put(key.getBytes)
+      //为put操作指定 column 和 value
+      p.addColumn(Bytes.toBytes("timelen"),column.getBytes,value.getBytes())
+      //提交一行
+      table.put(p)
+      return true
+    }catch {
+      case ex:Exception => {
+        println(ex)
+      }
+        return false
     }
   }
 

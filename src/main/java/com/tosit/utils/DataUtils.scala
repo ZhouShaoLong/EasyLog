@@ -35,7 +35,7 @@ object DataUtils {
     var _map: Map[String, Long] = Map()
     data.foreach(data=>{
       val key: String = data.get("package").toString
-      val value: Long = data.get("activity").toString.toDouble.toLong
+      val value: Long = data.get("activetime").toString.toDouble.toLong
       _map += (key -> value)
     })
 

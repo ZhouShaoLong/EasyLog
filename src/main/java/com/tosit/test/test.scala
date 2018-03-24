@@ -79,6 +79,16 @@ object test {
 /*        var res = HbaseUtils.ifExists(connection,"behavior_user_hour_app_time_201702","2000:201702:broswer1")
         println(res)*/
 
+        /*var res = HbaseUtils.ifExistsByColumn(connection,"behavior_user_hour_app_time_201702","2000:201702:broswer1","6")
+        println(res)*/
+
+        var res2 = HbaseUtils.updateColumn(connection,"behavior_user_hour_app_time_201702","2000:201702:broswer1","6","3000")
+        println(res2)
+
+
+        var res = HbaseUtils.getValueByColumn(connection,"behavior_user_hour_app_time_201702","2000:201702:broswer1","6")
+        println(res)
+
       } finally {
         connection.close
         //sc.stop
