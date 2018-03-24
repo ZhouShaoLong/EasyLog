@@ -7,6 +7,12 @@ class DataUtils {}
 
 object DataUtils {
   def StringToMap(jsonStr: String): Map[String, Any] = {
+
+    JSON.globalNumberParser = {
+      in =>
+        try in.toInt catch { case _: NumberFormatException => in.toDouble}
+    }
+
     val jsonValue = JSON.parseFull(jsonStr)
 
     val jsonObj = jsonValue match {
@@ -17,12 +23,27 @@ object DataUtils {
   }
 
   def MapToEasyLog(map: Map[String, Any]): EasyLog = {
-    val userId = map.get("username").toString
-    val attribute = map.apply("attribute").asInstanceOf[Map[String, String]]
-    val age = attribute
+    val userId = map.apply("userId").toString.toDouble.toInt
+    val day = map.apply("day").toString
+    val begintime = map.apply("begintime").toString.toDouble.toLong
+    val endtime = map.apply("endtime").toString.toDouble.toLong
+    val data = map.apply("data").asInstanceOf[List[Map[String, Any]]]
 
-    println(age)
-    val easyLog = new EasyLog(1, userId, 1000, 1000, Map("aaa" -> 100))
+    var _map: Map[String, Long] = Map()
+    data.foreach(data=>{
+      val list = data.values.toList
+      val key: String = list.head.toString
+      val value: Long = list.apply(1).toString.toDouble.toLong
+      _map += (key -> value)
+    })
+
+    val easyLog = new EasyLog(userId, day, begintime, endtime, _map)
+    easyLog
+  }
+
+  def DataProcess(str: String): EasyLog ={
+    val map = StringToMap(str)
+    val easyLog = MapToEasyLog(map)
     easyLog
   }
 

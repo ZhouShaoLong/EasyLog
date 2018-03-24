@@ -37,7 +37,7 @@ object Main {
     val str = stream.map(_._2)
 
     val easyLog = str.flatMap(_.split("\n")).map(DataUtils.DataProcess)
-    easyLog.map(_).print()
+    easyLog.map(_.getData()).print()
 
     str.print()
 
