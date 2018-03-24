@@ -92,7 +92,6 @@ object HbaseUtils{
     }*/
   }
 
-
   //根据key展示一行数据，仅用于测试使用
   def showRow(connection:Connection,tableName: String, key: String):Unit= {
     val userTable = TableName.valueOf(tableName)
@@ -107,6 +106,18 @@ object HbaseUtils{
           println(new String(rowKv.getValue))
           println("---------------------")
         }
+  }
+
+  def ifExists(connection: Connection,tableName:String,key:String):Boolean = {
+    val userTable = TableName.valueOf(tableName)
+    val table:Table = connection.getTable(userTable)
+    val get: Get = new Get(Bytes.toBytes(key))
+    val result: Result = table.get(get)
+    if (result.isEmpty){
+      return false
+    }else{
+      return true
+    }
   }
 
   //获取所有数据

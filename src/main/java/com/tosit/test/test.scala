@@ -1,6 +1,6 @@
 package com.tosit.test
 
-import com.tosit.utils.WriteReadHbase
+import com.tosit.utils.{HbaseUtils, WriteReadHbase}
 import org.apache.hadoop.hbase.HBaseConfiguration
 import org.apache.hadoop.hbase.client.ConnectionFactory
 import org.apache.hadoop.hbase.mapreduce.TableInputFormat
@@ -70,11 +70,14 @@ object test {
         println(res.getData())
         println(res.getDay())*/
 
-        var res = WriteReadHbase.readFromBUHAT(connection,"behavior_user_hour_app_time_201702","2000:201702:broswer1")
+/*        var res = WriteReadHbase.readFromBUHAT(connection,"behavior_user_hour_app_time_201702","2000:201702:broswer1")
         println(res.getApp())
         println(res.getDay())
         println(res.getUserId())
-        println(res.getData())
+        println(res.getData())*/
+
+/*        var res = HbaseUtils.ifExists(connection,"behavior_user_hour_app_time_201702","2000:201702:broswer1")
+        println(res)*/
 
       } finally {
         connection.close
