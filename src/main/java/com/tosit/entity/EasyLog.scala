@@ -13,6 +13,7 @@ class EasyLog(_userId: Int, _day: String, _begintime: Long, _endtime: Long, _dat
   def getDay() = day
   def getBegintime() = begintime
   def getEndtime() = endtime
+  def getclock() = clock
   def getData() = data
 }
 
