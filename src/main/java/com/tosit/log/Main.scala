@@ -1,5 +1,6 @@
 package com.tosit.log
 
+
 import com.tosit.utils.{DataUtils, KafkaUtils}
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
@@ -38,6 +39,7 @@ object Main {
 
     val easyLog = str.flatMap(_.split("\n")).map(DataUtils.DataProcess)
     easyLog.map(_.getData()).print()
+
 
     str.print()
 

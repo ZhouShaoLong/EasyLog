@@ -1,6 +1,7 @@
 package com.tosit.utils
 
 import com.tosit.entity.EasyLog
+
 import scala.util.parsing.json.JSON
 
 class DataUtils {}
@@ -45,6 +46,7 @@ object DataUtils {
     val map = StringToMap(str)
     val easyLog = MapToEasyLog(map)
     easyLog
+
   }
 
 //  def getHbaseData(): EasyLog = {

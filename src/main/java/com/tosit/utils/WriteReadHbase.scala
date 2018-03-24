@@ -2,7 +2,9 @@ package com.tosit.utils
 
 import com.tosit.entity.{BehaviorUserApp, BehaviorUserDayTime, BehaviorUserHourAppTime, BehaviorUserHourTime}
 import org.apache.hadoop.hbase.client.Connection
+import org.json.JSONObject
 import sun.util.resources.ga.LocaleNames_ga
+import scala.util.parsing.json.JSONArray
 
 class WriteReadHbase {
 }
@@ -14,6 +16,8 @@ object WriteReadHbase{
     data.keys.foreach{ i=>
       HbaseUtils.insertHTable(connection,tableName,"timelen",i,behaviorUserApp.getUserId().toString +":"+ behaviorUserApp.getDay(),data(i).toString)
     }
+    HbaseUtils.insertHTable(connection,tableName,"timelen","begintime",behaviorUserApp.getUserId().toString +":"+ behaviorUserApp.getDay(),behaviorUserApp.getBegintime().toString)
+    HbaseUtils.insertHTable(connection,tableName,"timelen","endtime",behaviorUserApp.getUserId().toString +":"+ behaviorUserApp.getDay(),behaviorUserApp.getEndtime().toString)
   }
 
   //向BehaviorUserDayTime类型数据库插入数据
@@ -39,7 +43,70 @@ object WriteReadHbase{
     var data:Map[Int,Long] = behaviorUserHourTime.getData()
     data.keys.foreach{i=>
       HbaseUtils.insertHTable(connection,tableName,"timelen",i.toString(),
-        behaviorUserHourTime.getUserId()+":"+behaviorUserHourTime.getMonth(),data(i).toString)
+        behaviorUserHourTime.getUserId()+":"+behaviorUserHourTime.getDay(),data(i).toString)
     }
+  }
+
+  //从BehaviorUserApp类型数据库很据key获取数据存入对象
+  def readFromBUA(connection: Connection,tableName:String,key:String):BehaviorUserApp = {
+    var info= key.split(":").toIterator
+    var userId = info.next()
+    var day = info.next()
+    var begintime:Long = 0
+    var endtime:Long = 0
+    var result = HbaseUtils.getRow(connection,tableName,key)
+    var data:Map[String,Long] = Map()
+    for (rowKv <- result.raw()) {
+      var qua = new String(rowKv.getQualifier)
+      qua match{
+        case "begintime" => begintime = (new String(rowKv.getValue)).toDouble.toLong
+        case "endtime" => endtime = (new String(rowKv.getValue)).toDouble.toLong
+        case _ => data += (qua -> (new String(rowKv.getValue)).toDouble.toLong)
+      }
+    }
+    var behaviorUserApp:BehaviorUserApp = new BehaviorUserApp(userId.toInt,day,begintime,endtime,data)
+    return behaviorUserApp
+  }
+
+  //从BehaviorUserDayTime类型数据库很据key获取数据存入对象
+  def readFromBUDT(connection: Connection,tableName:String,key:String):BehaviorUserDayTime = {
+    var result = HbaseUtils.getRow(connection,tableName,key)
+    var data:Map[Int,Long] = Map()
+    var ite = tableName.split("_").toArray
+    var mon = ite(ite.length-1)
+    for (rowKv <- result.raw()){
+      data += ((new String(rowKv.getQualifier)).toInt -> (new String(rowKv.getValue)).toDouble.toLong)
+    }
+    var behaviorUserDayTime:BehaviorUserDayTime = new BehaviorUserDayTime(key.toInt,mon,data)
+    return behaviorUserDayTime
+  }
+
+  //从BehaviorUserHourTime类型数据库很据key获取数据存入对象
+  def readFromBUHT(connection: Connection,tableName:String,key:String):BehaviorUserHourTime = {
+    var result = HbaseUtils.getRow(connection,tableName,key)
+    var data:Map[Int,Long] = Map()
+    var ite = key.split(":").toArray
+    var userId = ite(0).toInt
+    var day = ite(1)
+    for (rowKv <- result.raw()){
+      data += ((new String(rowKv.getQualifier)).toInt -> (new String(rowKv.getValue)).toDouble.toLong)
+    }
+    var behaviorUserHourTime:BehaviorUserHourTime = new BehaviorUserHourTime(userId,day,data)
+    return behaviorUserHourTime
+  }
+
+  //从BehaviorUserHourAppTime类型数据库很据key获取数据存入对象
+  def readFromBUHAT(connection: Connection,tableName:String,key:String):BehaviorUserHourAppTime = {
+    var result = HbaseUtils.getRow(connection,tableName,key)
+    var data:Map[Int,Long] = Map()
+    var ite = key.split(":").toArray
+    var userId = ite(0).toInt
+    var day = ite(1)
+    var app = ite(2)
+    for (rowKv <- result.raw()){
+      data += ((new String(rowKv.getQualifier)).toInt -> (new String(rowKv.getValue)).toDouble.toLong)
+    }
+    var behaviorUserHourAppTime:BehaviorUserHourAppTime = new BehaviorUserHourAppTime(userId,day,app,data)
+    return behaviorUserHourAppTime
   }
 }

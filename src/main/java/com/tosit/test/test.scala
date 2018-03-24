@@ -32,12 +32,12 @@ object test {
         //HbaseUtils.scanRecord(connection, "blog", "article", "engish")
         //删除表测试
         //deleteHTable(connection, "blog")
-        //HbaseUtils.getRow(connection,"blog","002")
+        //HbaseUtils.getRow(connection,"behavior_user_app_201702","2000:20170202")
 
 /*        val sites = Map("runoob" -> 1000l,
           "baidu" -> 1000l,
           "taobao" -> 1000l)
-        var behaviorUserApp:BehaviorUserApp = new BehaviorUserApp(2000,"20170202",1000,2000,sites)
+        var behaviorUserApp:BehaviorUserApp = new BehaviorUserApp(3000,"20170202",1000,2000,sites)
         WriteReadHbase.writeToBUA(connection,behaviorUserApp,"behavior_user_app_201702")*/
 
 /*        val site2 = Map(6 -> 1000l,
@@ -52,11 +52,30 @@ object test {
         var behaviorUserHourAppTime:BehaviorUserHourAppTime = new BehaviorUserHourAppTime(2000,"201702","broswer1",site3)
         WriteReadHbase.writeToBUHAT(connection,behaviorUserHourAppTime,"behavior_user_hour_app_time_201702")*/
 
-        val site4 = Map(6 -> 1000l,
+/*        val site4 = Map(6 -> 1000l,
           7 -> 1000l,
           8 -> 1000l)
         var behaviorUserHourTime:BehaviorUserHourTime = new BehaviorUserHourTime(2000,"201702",site4)
-        WriteReadHbase.writeToBUHT(connection,behaviorUserHourTime,"behavior_user_hour_time_201702")
+        WriteReadHbase.writeToBUHT(connection,behaviorUserHourTime,"behavior_user_hour_time_201702")*/
+
+        //HbaseUtils.showRow(connection,"behavior_user_day_time_201702","2000")
+
+/*        var res = WriteReadHbase.readFromBUA(connection,"behavior_user_app_201702","3000:20170202")
+        println(res.getBegintime())
+        println(res.getEndtime())
+        println(res.getDay())
+        println(res.getData())*/
+
+/*        var res = WriteReadHbase.readFromBUHT(connection,"behavior_user_hour_time_201702","2000:201702")
+        println(res.getUserId())
+        println(res.getData())
+        println(res.getDay())*/
+
+        var res = WriteReadHbase.readFromBUHAT(connection,"behavior_user_hour_app_time_201702","2000:201702:broswer1")
+        println(res.getApp())
+        println(res.getDay())
+        println(res.getUserId())
+        println(res.getData())
 
       } finally {
         connection.close
