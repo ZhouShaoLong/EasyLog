@@ -30,11 +30,12 @@ object DataUtils {
     val endtime = map.apply("endtime").toString.toDouble.toLong
     val data = map.apply("data").asInstanceOf[List[Map[String, Any]]]
 
+    println(data)
+
     var _map: Map[String, Long] = Map()
     data.foreach(data=>{
-      val list = data.values.toList
-      val key: String = list.head.toString
-      val value: Long = list.apply(1).toString.toDouble.toLong
+      val key: String = data.get("package").toString
+      val value: Long = data.get("activity").toString.toDouble.toLong
       _map += (key -> value)
     })
 

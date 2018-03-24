@@ -4,7 +4,6 @@ import com.tosit.utils.{HbaseUtils, WriteReadHbase}
 import org.apache.hadoop.hbase.HBaseConfiguration
 import org.apache.hadoop.hbase.client.ConnectionFactory
 import org.apache.hadoop.hbase.mapreduce.TableInputFormat
-import com.tosit.entity.{BehaviorUserApp, BehaviorUserDayTime, BehaviorUserHourAppTime, BehaviorUserHourTime}
 
 object test {
   def main(args: Array[String]): Unit = {
@@ -71,11 +70,14 @@ object test {
         println(res.getData())
         println(res.getDay())*/
 
-        var res = WriteReadHbase.readFromBUHAT(connection,"behavior_user_hour_app_time_201702","2000:201702:broswer1")
+/*        var res = WriteReadHbase.readFromBUHAT(connection,"behavior_user_hour_app_time_201702","2000:201702:broswer1")
         println(res.getApp())
         println(res.getDay())
         println(res.getUserId())
-        println(res.getData())
+        println(res.getData())*/
+
+/*        var res = HbaseUtils.ifExists(connection,"behavior_user_hour_app_time_201702","2000:201702:broswer1")
+        println(res)*/
 
       } finally {
         connection.close

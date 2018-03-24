@@ -1,9 +1,10 @@
 package com.tosit.utils
 
+import java.util.Iterator
+
 import org.apache.hadoop.hbase.client._
 import org.apache.hadoop.hbase.util.Bytes
 import org.apache.hadoop.hbase.{HColumnDescriptor, HTableDescriptor, TableName}
-import java.util.Iterator
 
 class HbaseUtils {
 }
@@ -91,7 +92,6 @@ object HbaseUtils{
     }*/
   }
 
-
   //根据key展示一行数据，仅用于测试使用
   def showRow(connection:Connection,tableName: String, key: String):Unit= {
     val userTable = TableName.valueOf(tableName)
@@ -106,6 +106,18 @@ object HbaseUtils{
           println(new String(rowKv.getValue))
           println("---------------------")
         }
+  }
+
+  def ifExists(connection: Connection,tableName:String,key:String):Boolean = {
+    val userTable = TableName.valueOf(tableName)
+    val table:Table = connection.getTable(userTable)
+    val get: Get = new Get(Bytes.toBytes(key))
+    val result: Result = table.get(get)
+    if (result.isEmpty){
+      return false
+    }else{
+      return true
+    }
   }
 
   //获取所有数据

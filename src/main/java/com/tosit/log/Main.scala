@@ -19,13 +19,12 @@ object Main {
     val Array(zkQuorum, group, topics, numThreads) =
       Array("hdp-node-01:2181,hdp-node-02:2181,hdp-node-03:2181,hdp-node-04:2181",
         "zookeeperGroup",
-        "test",
+        "testkafka",
         "2"
       )
 
     conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
 
-    val topic = "test"
     val topicMap = topics.split(",").map((_, numThreads.toInt)).toMap
 
     val kafkaParams = Map[String, String](
