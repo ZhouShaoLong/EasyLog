@@ -1,5 +1,6 @@
 package com.tosit.test
 
+import com.tosit.entity.BehaviorUserHourAppTime
 import com.tosit.utils.{HbaseUtils, WriteReadHbase}
 import org.apache.hadoop.hbase.HBaseConfiguration
 import org.apache.hadoop.hbase.client.ConnectionFactory
@@ -45,10 +46,10 @@ object test {
         var behaviorUserDayTime:BehaviorUserDayTime = new BehaviorUserDayTime(2000,"201702",site2)
         WriteReadHbase.writeToBUDT(connection,behaviorUserDayTime,"behavior_user_day_time_201702")*/
 
-/*        val site3 = Map(6 -> 1000l,
-          7 -> 1000l,
-          8 -> 1000l)
-        var behaviorUserHourAppTime:BehaviorUserHourAppTime = new BehaviorUserHourAppTime(2000,"201702","broswer1",site3)
+/*        val site3 = Map("com.bro1" -> 1000l,
+          "com.bro2" -> 1000l,
+          "com.bro3" -> 1000l)
+        var behaviorUserHourAppTime:BehaviorUserHourAppTime = new BehaviorUserHourAppTime(2000,"201702",12,site3)
         WriteReadHbase.writeToBUHAT(connection,behaviorUserHourAppTime,"behavior_user_hour_app_time_201702")*/
 
 /*        val site4 = Map(6 -> 1000l,
@@ -70,8 +71,7 @@ object test {
         println(res.getData())
         println(res.getDay())*/
 
-/*        var res = WriteReadHbase.readFromBUHAT(connection,"behavior_user_hour_app_time_201702","2000:201702:broswer1")
-        println(res.getApp())
+/*        var res = WriteReadHbase.readFromBUHAT(connection,"behavior_user_hour_app_time_201702","2000:201702:com.bro2",12)
         println(res.getDay())
         println(res.getUserId())
         println(res.getData())*/
@@ -82,16 +82,19 @@ object test {
         /*var res = HbaseUtils.ifExistsByColumn(connection,"behavior_user_hour_app_time_201702","2000:201702:broswer1","6")
         println(res)*/
 
-        var res2 = HbaseUtils.updateColumn(connection,"behavior_user_hour_app_time_201702","2000:201702:broswer1","6","3000")
+/*        var res2 = HbaseUtils.updateColumn(connection,"behavior_user_hour_app_time_201702","2000:201702:broswer1","6","3000")
         println(res2)
 
 
         var res = HbaseUtils.getValueByColumn(connection,"behavior_user_hour_app_time_201702","2000:201702:broswer1","6")
-        println(res)
+        println(res)*/
 
-      } finally {
         connection.close
         //sc.stop
+      }catch{
+        case ex:Exception => {
+          println(ex)
+        }
       }
     }
   }
