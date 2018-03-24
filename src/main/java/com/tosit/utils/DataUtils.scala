@@ -1,6 +1,6 @@
 package com.tosit.utils
 
-import com.tosit.entity.{BehaviorUserApp, BehaviorUserHourTime, EasyLog}
+import com.tosit.entity._
 import org.apache.hadoop.hbase.HBaseConfiguration
 import org.apache.hadoop.hbase.client.{Connection, ConnectionFactory}
 import org.apache.hadoop.hbase.mapreduce.TableInputFormat
@@ -63,6 +63,8 @@ object DataUtils {
     val connection = ConnectionFactory.createConnection(conf)
     ToHourTime(connection,easyLog)
     ToApp(connection,easyLog)
+    ToDayTime(connection,easyLog)
+    ToHourAppTime(connection,easyLog)
   }
 
   def ToHourTime(connection:Connection,easyLog: EasyLog): Unit ={
@@ -90,12 +92,65 @@ object DataUtils {
     }
   }
 
-  def ToHourAppTime(easyLog: EasyLog): Unit ={
+  def ToHourAppTime(connection: Connection,easyLog: EasyLog): Unit ={
+    val userId = easyLog.getUserId()
+    val arr = easyLog.getDay().split("-").toArray
+    val clock = easyLog.getClock()
+    val data = easyLog.getData()
+    val day = easyLog.getDay()
 
+    val behaviorUserHourAppTime = new BehaviorUserHourAppTime(userId, easyLog.getDay(), clock, data)
+    data.keys.foreach{i =>
+      if(HbaseUtils.ifExistsByColumn(connection,
+        "behavior_user_hour_app_time_201702",
+        userId+":"+day + ":" +i,
+        clock.toString)){
+        val len = HbaseUtils.getValueByColumn(connection,
+          "behavior_user_hour_app_time_201702",
+          userId+":"+day + ":" +i,
+          clock.toString).toLong + data(i).toLong
+        HbaseUtils.updateColumn(connection,
+          "behavior_user_hour_app_time_201702",
+          userId+":"+day + ":" +i,
+          clock.toString,len.toString)
+      }else{
+        HbaseUtils.updateColumn(connection,
+          "behavior_user_hour_app_time_201702",
+          userId+":"+day + ":" +i,
+          clock.toString,data(i).toString)
+      }
+    }
   }
 
-  def ToDayTime(easyLog: EasyLog): Unit ={
-
+  def ToDayTime(connection: Connection,easyLog: EasyLog): Unit ={
+    val date  = easyLog.getDay()
+    val arr = date.toString.split("-").toArray
+    val day = arr(2)
+    val month = arr(0) + arr(1)
+    var timeLen: Int = 0
+    var userId = easyLog.getUserId()
+    easyLog.getData().values.foreach{i=>
+      timeLen += i.toInt
+    }
+    val behaviorUserDayTime = new BehaviorUserDayTime(easyLog.getUserId(), month, Map(day.toInt->timeLen.toLong))
+    if(HbaseUtils.ifExistsByColumn(connection,
+      "behavior_user_day_time_201702",
+      userId+":"+month,
+      day)){
+      var len = HbaseUtils.getValueByColumn(connection,
+        "behavior_user_day_time_201702",
+        userId+":"+month,
+        day).toLong + timeLen.toLong
+      HbaseUtils.updateColumn(connection,
+        "behavior_user_day_time_201702",
+        userId+":"+month,
+        day,len.toString)
+    }else{
+      HbaseUtils.updateColumn(connection,
+        "behavior_user_day_time_201702",
+        userId+":"+month,
+        day,timeLen.toString)
+    }
   }
 
   def ToApp(connection: Connection,easyLog: EasyLog): Unit ={
