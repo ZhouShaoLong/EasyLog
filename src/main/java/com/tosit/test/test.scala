@@ -58,13 +58,24 @@ object test {
         var behaviorUserHourTime:BehaviorUserHourTime = new BehaviorUserHourTime(2000,"201702",site4)
         WriteReadHbase.writeToBUHT(connection,behaviorUserHourTime,"behavior_user_hour_time_201702")*/
 
-        HbaseUtils.showRow(connection,"behavior_user_day_time_201702","2000")
+        //HbaseUtils.showRow(connection,"behavior_user_day_time_201702","2000")
 
 /*        var res = WriteReadHbase.readFromBUA(connection,"behavior_user_app_201702","3000:20170202")
         println(res.getBegintime())
         println(res.getEndtime())
         println(res.getDay())
         println(res.getData())*/
+
+/*        var res = WriteReadHbase.readFromBUHT(connection,"behavior_user_hour_time_201702","2000:201702")
+        println(res.getUserId())
+        println(res.getData())
+        println(res.getDay())*/
+
+        var res = WriteReadHbase.readFromBUHAT(connection,"behavior_user_hour_app_time_201702","2000:201702:broswer1")
+        println(res.getApp())
+        println(res.getDay())
+        println(res.getUserId())
+        println(res.getData())
 
       } finally {
         connection.close

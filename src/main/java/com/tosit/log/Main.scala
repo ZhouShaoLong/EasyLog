@@ -37,8 +37,8 @@ object Main {
     val stream = KafkaUtils.getStream(ssc, kafkaParams, topicMap)
     val str = stream.map(_._2)
 
-    val easyLog = str.flatMap(_.split("\n")).map(DataUtils.DataProcess)
-    easyLog.map(_).print()
+    //val easyLog = str.flatMap(_.split("\n")).map(DataUtils.DataProcess)
+    //easyLog.map(_).print()
 
     str.print()
 

@@ -43,7 +43,7 @@ object WriteReadHbase{
     var data:Map[Int,Long] = behaviorUserHourTime.getData()
     data.keys.foreach{i=>
       HbaseUtils.insertHTable(connection,tableName,"timelen",i.toString(),
-        behaviorUserHourTime.getUserId()+":"+behaviorUserHourTime.getMonth(),data(i).toString)
+        behaviorUserHourTime.getUserId()+":"+behaviorUserHourTime.getDay(),data(i).toString)
     }
   }
 
@@ -59,9 +59,9 @@ object WriteReadHbase{
     for (rowKv <- result.raw()) {
       var qua = new String(rowKv.getQualifier)
       qua match{
-        case "begintime" => begintime = (new String(rowKv.getValue)).toInt.toLong
-        case "endtime" => endtime = (new String(rowKv.getValue)).toInt.toLong
-        case _ => data += (qua -> (new String(rowKv.getValue)).toInt.toLong)
+        case "begintime" => begintime = (new String(rowKv.getValue)).toDouble.toLong
+        case "endtime" => endtime = (new String(rowKv.getValue)).toDouble.toLong
+        case _ => data += (qua -> (new String(rowKv.getValue)).toDouble.toLong)
       }
     }
     var behaviorUserApp:BehaviorUserApp = new BehaviorUserApp(userId.toInt,day,begintime,endtime,data)
@@ -74,11 +74,39 @@ object WriteReadHbase{
     var data:Map[Int,Long] = Map()
     var ite = tableName.split("_").toArray
     var mon = ite(ite.length-1)
-    println(mon)
     for (rowKv <- result.raw()){
-      data += ((new String(rowKv.getQualifier)).toInt -> (new String(rowKv.getValue)).toInt.toLong)
+      data += ((new String(rowKv.getQualifier)).toInt -> (new String(rowKv.getValue)).toDouble.toLong)
     }
     var behaviorUserDayTime:BehaviorUserDayTime = new BehaviorUserDayTime(key.toInt,mon,data)
     return behaviorUserDayTime
+  }
+
+  //从BehaviorUserHourTime类型数据库很据key获取数据存入对象
+  def readFromBUHT(connection: Connection,tableName:String,key:String):BehaviorUserHourTime = {
+    var result = HbaseUtils.getRow(connection,tableName,key)
+    var data:Map[Int,Long] = Map()
+    var ite = key.split(":").toArray
+    var userId = ite(0).toInt
+    var day = ite(1)
+    for (rowKv <- result.raw()){
+      data += ((new String(rowKv.getQualifier)).toInt -> (new String(rowKv.getValue)).toDouble.toLong)
+    }
+    var behaviorUserHourTime:BehaviorUserHourTime = new BehaviorUserHourTime(userId,day,data)
+    return behaviorUserHourTime
+  }
+
+  //从BehaviorUserHourAppTime类型数据库很据key获取数据存入对象
+  def readFromBUHAT(connection: Connection,tableName:String,key:String):BehaviorUserHourAppTime = {
+    var result = HbaseUtils.getRow(connection,tableName,key)
+    var data:Map[Int,Long] = Map()
+    var ite = key.split(":").toArray
+    var userId = ite(0).toInt
+    var day = ite(1)
+    var app = ite(2)
+    for (rowKv <- result.raw()){
+      data += ((new String(rowKv.getQualifier)).toInt -> (new String(rowKv.getValue)).toDouble.toLong)
+    }
+    var behaviorUserHourAppTime:BehaviorUserHourAppTime = new BehaviorUserHourAppTime(userId,day,app,data)
+    return behaviorUserHourAppTime
   }
 }

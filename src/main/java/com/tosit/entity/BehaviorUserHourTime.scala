@@ -10,6 +10,6 @@ class BehaviorUserHourTime(_userId:Int,_day:String,_data:Map[Int,Long]) {
   var data:Map[Int,Long] = _data
 
   def getUserId() = userId
-  def getMonth() = day
+  def getDay() = day
   def getData() = data
 }
