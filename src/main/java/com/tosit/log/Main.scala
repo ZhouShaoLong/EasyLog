@@ -1,6 +1,7 @@
 package com.tosit.log
 
 
+import com.tosit.entity.EasyLog
 import com.tosit.utils.{DataUtils, KafkaUtils}
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
@@ -19,7 +20,7 @@ object Main {
     val Array(zkQuorum, group, topics, numThreads) =
       Array("hdp-node-01:2181,hdp-node-02:2181,hdp-node-03:2181,hdp-node-04:2181",
         "zookeeperGroup",
-        "test",
+        "testkafka",
         "2"
       )
 
@@ -34,10 +35,7 @@ object Main {
     )
 
     val stream = KafkaUtils.getStream(ssc, kafkaParams, topicMap)
-    val str = stream.map(_._2)
-
-    val easyLog = str.flatMap(_.split("\n")).map(DataUtils.DataProcess)
-    easyLog.map(DataUtils.DataToHbase)
+    val str = stream.map(_._2).map(DataUtils.DataProcess).map(DataUtils.DataToHbase)
 
 
     str.print()

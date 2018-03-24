@@ -11,7 +11,7 @@ import java.util.Random;
 public class Client {
     public static void main(String[] args){
         //模拟数据生成
-        int[] userIds = {2000,20001,2002};
+        int[] userIds = {2000,2000,2001};
         long begintime = 1488326400000l;
         long endtime = 1488327000000l;
         String[] packages = {"com.browser","com.browser1","com.browser2"};
@@ -19,7 +19,7 @@ public class Client {
         String urlPost = ":55533";
         String url = "";
         Random random = new Random();
-        for (int i=0;i<20;i++){
+        for (int i=0;i<6;i++){
             JSONObject obj = new JSONObject();
             JSONArray arr = new JSONArray();
             JSONObject data1 = new JSONObject();
@@ -33,9 +33,9 @@ public class Client {
             obj.put("begintime",begintime+600000l*i);
             obj.put("endtime",endtime+600000l*i);
             data1.put("package",packages[random.nextInt(3)]);
-            data1.put("activetime",60000);
+            data1.put("activetime",1);
             data2.put("package",packages[random.nextInt(3)]);
-            data2.put("activetime",120000);
+            data2.put("activetime",100);
             arr.put(data1);
             arr.put(data2);
             obj.put("data",arr);

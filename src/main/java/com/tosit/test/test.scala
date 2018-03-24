@@ -1,6 +1,6 @@
 package com.tosit.test
 
-import com.tosit.entity.BehaviorUserHourAppTime
+import com.tosit.entity.{BehaviorUserApp, BehaviorUserHourAppTime}
 import com.tosit.utils.{HbaseUtils, WriteReadHbase}
 import org.apache.hadoop.hbase.HBaseConfiguration
 import org.apache.hadoop.hbase.client.ConnectionFactory
@@ -20,7 +20,6 @@ object test {
       val connection = ConnectionFactory.createConnection(conf)
       //创建表测试
       val f: Array[String] = Array("article")
-      try {
         //HbaseUtils.createHTable(connection, "blog", f)
         //插入数据,重复执行为覆盖
         //HbaseUtils.insertHTable(connection, "blog", "article", "engish", "002", "c++ for me")
@@ -34,11 +33,11 @@ object test {
         //deleteHTable(connection, "blog")
         //HbaseUtils.getRow(connection,"behavior_user_app_201702","2000:20170202")
 
-/*        val sites = Map("runoob" -> 1000l,
+        val sites = Map("runoob" -> 1000l,
           "baidu" -> 1000l,
           "taobao" -> 1000l)
-        var behaviorUserApp:BehaviorUserApp = new BehaviorUserApp(3000,"20170202",1000,2000,sites)
-        WriteReadHbase.writeToBUA(connection,behaviorUserApp,"behavior_user_app_201702")*/
+        var behaviorUserApp:BehaviorUserApp = new BehaviorUserApp(3000,"20170202",sites)
+        WriteReadHbase.writeToBUA(connection,behaviorUserApp,"behavior_user_app_201702")
 
 /*        val site2 = Map(6 -> 1000l,
           7 -> 1000l,
@@ -60,11 +59,9 @@ object test {
 
         //HbaseUtils.showRow(connection,"behavior_user_day_time_201702","2000")
 
-/*        var res = WriteReadHbase.readFromBUA(connection,"behavior_user_app_201702","3000:20170202")
-        println(res.getBegintime())
-        println(res.getEndtime())
+        var res = WriteReadHbase.readFromBUA(connection,"behavior_user_app_201702","3000:20170202")
         println(res.getDay())
-        println(res.getData())*/
+        println(res.getData())
 
 /*        var res = WriteReadHbase.readFromBUHT(connection,"behavior_user_hour_time_201702","2000:201702")
         println(res.getUserId())
@@ -88,7 +85,6 @@ object test {
 
         var res = HbaseUtils.getValueByColumn(connection,"behavior_user_hour_app_time_201702","2000:201702:broswer1","6")
         println(res)*/
-
         connection.close
         //sc.stop
       }catch{
@@ -97,5 +93,4 @@ object test {
         }
       }
     }
-  }
 }
