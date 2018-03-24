@@ -19,7 +19,7 @@ object Main {
     val Array(zkQuorum, group, topics, numThreads) =
       Array("hdp-node-01:2181,hdp-node-02:2181,hdp-node-03:2181,hdp-node-04:2181",
         "zookeeperGroup",
-        "testkafka",
+        "test",
         "2"
       )
 
@@ -37,7 +37,7 @@ object Main {
     val str = stream.map(_._2)
 
     val easyLog = str.flatMap(_.split("\n")).map(DataUtils.DataProcess)
-    easyLog.map(_.getData()).print()
+    easyLog.map(DataUtils.DataToHbase)
 
 
     str.print()

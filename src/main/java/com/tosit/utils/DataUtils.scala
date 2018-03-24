@@ -1,6 +1,7 @@
 package com.tosit.utils
 
 import com.tosit.entity.EasyLog
+import com.tosit.entity.BehaviorUserHourTime
 
 import scala.util.parsing.json.JSON
 
@@ -34,8 +35,8 @@ object DataUtils {
 
     var _map: Map[String, Long] = Map()
     data.foreach(data=>{
-      val key: String = data.get("package").toString
-      val value: Long = data.get("activity").toString.toDouble.toLong
+      val key: String = data.apply("package").toString
+      val value: Long = data.apply("activetime").toString.toDouble.toLong
       _map += (key -> value)
     })
 
@@ -47,15 +48,34 @@ object DataUtils {
     val map = StringToMap(str)
     val easyLog = MapToEasyLog(map)
     easyLog
+  }
+
+  def DataToHbase(easyLog: EasyLog): Unit ={
+    ToHourTime(easyLog)
+  }
+
+  def ToHourTime(easyLog: EasyLog): Unit ={
+    val clock:Int = easyLog.getClock()
+    var timeLen:Long = 0
+    easyLog.getData().foreach(data=>{
+      timeLen+=data._2
+    })
+
+    val behaviorUserHourTime = new BehaviorUserHourTime(easyLog.getUserId(), easyLog.getDay(),Map(clock->timeLen))
+
+    println("ToHourTime")
+  }
+
+  def ToHourAppTime(easyLog: EasyLog): Unit ={
 
   }
 
-//  def getHbaseData(): EasyLog = {
-//  }
+  def ToDayTime(easyLog: EasyLog): Unit ={
 
-//  def updateUserData: Unit ={
-//
-//  }
+  }
 
+  def ToApp(easyLog: EasyLog): Unit ={
+
+  }
 
 }
