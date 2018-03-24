@@ -1,10 +1,9 @@
 package com.tosit.test
 
-import com.tosit.utils.{HbaseUtils, WriteReadHbase}
+import com.tosit.utils.WriteReadHbase
 import org.apache.hadoop.hbase.HBaseConfiguration
 import org.apache.hadoop.hbase.client.ConnectionFactory
 import org.apache.hadoop.hbase.mapreduce.TableInputFormat
-import com.tosit.entity.{BehaviorUserApp, BehaviorUserDayTime, BehaviorUserHourAppTime, BehaviorUserHourTime}
 
 object test {
   def main(args: Array[String]): Unit = {

@@ -2,9 +2,6 @@ package com.tosit.utils
 
 import com.tosit.entity.{BehaviorUserApp, BehaviorUserDayTime, BehaviorUserHourAppTime, BehaviorUserHourTime}
 import org.apache.hadoop.hbase.client.Connection
-import org.json.JSONObject
-import sun.util.resources.ga.LocaleNames_ga
-import scala.util.parsing.json.JSONArray
 
 class WriteReadHbase {
 }

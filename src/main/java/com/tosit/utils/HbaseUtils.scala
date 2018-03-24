@@ -1,9 +1,10 @@
 package com.tosit.utils
 
+import java.util.Iterator
+
 import org.apache.hadoop.hbase.client._
 import org.apache.hadoop.hbase.util.Bytes
 import org.apache.hadoop.hbase.{HColumnDescriptor, HTableDescriptor, TableName}
-import java.util.Iterator
 
 class HbaseUtils {
 }
